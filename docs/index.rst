@@ -6,10 +6,10 @@ Nameko
 *[nah-meh-koh]*
 
 .. pull-quote ::
+	
+	一个用于Python的微服务框架，允许服务开发人员专注于应用程序逻辑并鼓励可测试性。
 
-    A microservices framework for Python that lets service developers concentrate on application logic and encourages testability.
-
-A nameko service is just a class:
+一个nameko服务只是一个类:
 
 .. code-block:: python
 
@@ -25,20 +25,17 @@ A nameko service is just a class:
             return "Hello, {}!".format(name)
 
 .. note::
-    The example above requires `RabbitMQ <https://www.rabbitmq.com>`_, because
-    it's using the built-in AMQP RPC features. `RabbitMQ installation guidelines <https://www.rabbitmq.com/download.html>`_
-    offer several installation options, but you can quickly install and run it
-    using `Docker <https://docs.docker.com/install/>`_.
+	上面的例子需要 `RabbitMQ <https://www.rabbitmq.com>`_ 因为它使用了内置的AMQP RPC特性。 `RabbitMQ安装指南 <https://www.rabbitmq.com/download.html>`_ 提供几个安装选项，但是您可以使用 `Docker <https://docs.docker.com/install/>`_ 命令快速安装和运行它。
 
-    To install and run RabbitMQ using docker:
+    使用docker安装和运行RabbitMQ:
 
     .. code-block:: shell
 
        $ docker run -d -p 5672:5672 rabbitmq:3
 
-    | *You might need to use sudo to do that.*
+    | *您可能需要使用sudo来实现这一点*
 
-You can run it in a shell:
+你可以在一个shell运行它:
 
 .. code-block:: shell
 
@@ -46,7 +43,7 @@ You can run it in a shell:
     starting services: greeting_service
     ...
 
-And play with it from another:
+和另一个shell一起玩：
 
 .. code-block:: pycon
 
@@ -56,10 +53,10 @@ And play with it from another:
 
 
 
-User Guide
-----------
+用户指南
+--------
 
-This section covers most things you need to know to create and run your own Nameko services.
+本节涵盖了创建和运行自己的Nameko服务所需了解的大部分内容。
 
 .. toctree::
    :maxdepth: 2
@@ -76,8 +73,8 @@ This section covers most things you need to know to create and run your own Name
 
 
 
-More Information
-----------------
+更多信息
+--------
 
 .. toctree::
    :maxdepth: 2
@@ -86,6 +83,3 @@ More Information
    dependency_injection_benefits
    similar_projects
    getting_in_touch
-   contributing
-   license
-   release_notes

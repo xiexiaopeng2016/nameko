@@ -12,6 +12,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+# 生成文档命令 sphinx-build -b html -a -n . _build
+
 import sphinx_nameko_theme
 import pkg_resources
 
@@ -34,7 +36,7 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
     'sphinx.ext.intersphinx',
-    'sphinxcontrib.spelling',
+    # 'sphinxcontrib.spelling',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -58,7 +60,7 @@ copyright = u'2015'
 # built documents.
 #
 # The short X.Y version.
-version = pkg_resources.get_distribution('nameko').version
+version =  "2.12.0" # pkg_resources.get_distribution('nameko').version
 # The full version, including alpha/beta/rc tags.
 release = version
 

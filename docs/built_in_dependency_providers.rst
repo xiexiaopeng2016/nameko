@@ -1,15 +1,15 @@
 .. _built_in_dependency_providers:
 
-Built-in Dependency Providers
+内置的依赖提供者
 =============================
 
-Nameko includes some commonly used :ref:`dependency providers <dependency_injection>`. This section introduces them and gives brief examples of their usage.
+Nameko包括一些常用的 :ref:`依赖项提供程序 <dependency_injection>` 。本节介绍它们，并给出其用法的简要示例。
 
 .. _config_dependency_provider:
 
-Config
+配置
 ------
 
-Config is a simple dependency provider that gives services read-only access to configuration values at run time, see :ref:`running_a_service`.
+配置是一个简单的依赖提供者，它在运行时为服务提供对配置值的只读访问权限，请参阅 :ref:`running_a_service` 。
 
 .. literalinclude:: examples/config_dependency_provider.py

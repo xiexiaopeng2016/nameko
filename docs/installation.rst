@@ -1,24 +1,24 @@
 .. _installation:
 
-Installation
-============
+安装
+====
 
-Install with Pip
-----------------
+使用Pip安装
+-----------
 
-You can install nameko and its dependencies from `PyPI <https://pypi.python.org/pypi/nameko>`_ with pip::
+您可以从 `PyPI <https://pypi.python.org/pypi/nameko>`_ 使用pip安装nameko及其依赖：
 
     pip install nameko
 
 
-Source Code
------------
+源代码
+------
 
-Nameko is actively developed on `GitHub <https://github.com/nameko/nameko>`_. Get the code by cloning the public repository::
+Nameko在 `GitHub <https://github.com/nameko/nameko>`_ 上积极开发。通过克隆公共存储库获取代码::
 
     git clone git@github.com:nameko/nameko.git
 
-You can install from the source code using setuptools::
+您可以使用setuptools从源代码进行安装::
 
     python setup.py install
 
@@ -26,16 +26,16 @@ You can install from the source code using setuptools::
 RabbitMQ
 --------
 
-Several of Nameko's built-in features rely on RabbitMQ. Installing RabbitMQ is straightforward on most platforms and they have `excellent documentation <https://www.rabbitmq.com/download.html>`_.
+Nameko的一些内置功能依赖RabbitMQ。在大多数平台上安装RabbitMQ都很简单，并且它们具有 `出色的文档 <https://www.rabbitmq.com/download.html>`_ 。
 
-With homebrew on a mac you can install with::
+在Mac上，您可以使用Homebrew安装::
 
     brew install rabbitmq
 
-On debian-based operating systems::
+在基于debian的操作系统上::
 
     apt-get install rabbitmq-server
 
-For other platforms, consult the `RabbitMQ installation guidelines <https://www.rabbitmq.com/download.html>`_.
+对于其他平台，请查阅 `RabbitMQ安装指南 <https://www.rabbitmq.com/download.html>`_ 。
 
-The RabbitMQ broker will be ready to go as soon as it's installed -- it doesn't need any configuration. The examples in this documentation assume you have a broker running on the default ports on localhost and the `rabbitmq_management <http://www.rabbitmq.com/management.html>`_ plugin is enabled.
+RabbitMQ代理将在安装后立即准备就绪 -- 无需任何配置。本文档中的示例假定您在本地主机的默认端口上运行了代理，并且启用了 `rabbitmq_management <http://www.rabbitmq.com/management.html>`_ 插件。

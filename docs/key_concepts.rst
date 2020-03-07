@@ -1,130 +1,130 @@
-Key Concepts
-============
+关键概念
+========
 
-This section introduces Nameko's central concepts.
+本节介绍Nameko的核心概念。
 
-Anatomy of a Service
---------------------
+服务剖析
+-------
 
-A Nameko service is just a Python class. The class encapsulates the application logic in its methods and declares any :ref:`dependencies <dependencies>` as attributes.
+一个Nameko服务只是一个Python类。该类将应用程序逻辑封装在其方法中，并将所有 :ref:`依赖 <dependencies>` 声明为属性。
 
-Methods are exposed to the outside world with :ref:`entrypoint <entrypoints>` decorators.
+方法通过 :ref:`入口点 <entrypoints>` 装饰器暴露给外部世界。
 
 .. literalinclude:: examples/anatomy.py
 
 .. _entrypoints:
 
-Entrypoints
-^^^^^^^^^^^
+入口点
+^^^^^^
 
-Entrypoints are gateways into the service methods they decorate. They  normally monitor an external entity, for example a message queue. On a relevant event, the entrypoint may "fire" and the decorated method would be executed by a service :ref:`worker <workers>`.
+入口点是进入它们装饰的服务方法的网关。它们通常监视一个外部实体，例如消息队列。在相关事件上，入口点可能会“开火”，并且修饰的方法将由一个服务 :ref:`工作者<workers>` 执行。
 
 .. _dependencies:
 
-Dependencies
-^^^^^^^^^^^^
+依赖
+^^^^
 
-Most services depend on something other than themselves. Nameko encourages these things to be implemented as dependencies.
+大多数服务都依赖于自己以外的东西。Nameko鼓励将这些东西实现为依赖。
 
-A dependency is an opportunity to hide code that isn't part of the core service logic. The dependency's interface to the service should be as simple as possible.
+一个依赖是隐藏不属于核心服务逻辑的代码的一个机会。服务的依赖的接口应尽可能简单。
 
-Declaring dependencies in your service is a good idea for :ref:`lots of reasons <benefits_of_dependency_injection>`, and you should think of them as the gateway between service code and everything else. That includes other services, external APIs, and even databases.
+出于 :ref:`多种原因 <benefits_of_dependency_injection>`，在服务中声明依赖是一个好主意，您应该把它们看作是服务代码和其他所有东西之间的网关。这包括其他服务、外部api，甚至数据库。
 
 .. _workers:
 
-Workers
-^^^^^^^
+工作者
+^^^^^^
 
-Workers are created when an entrypoint fires. A worker is just an instance of the service class, but with the dependency declarations replaced with instances of those dependencies (see :ref:`dependency injection <dependency_injection>`).
+入口点触发时创建工作者。一个工作者只是服务类的一个实例，但是依赖声明已替换为那些依赖的实例(请参阅 :ref:`依赖注入 <dependency_injection>`)。
 
-Note that a worker only lives for the execution of one method -- services are stateless from one call to the next, which encourages the use of dependencies.
+请注意，一个工作者只为执行一个方法而存在 - 服务从一次调用到下一次调用是无状态的，这鼓励了依赖的使用。
 
-A service can run multiple workers at the same time, up to a user-defined limit. See :ref:`concurrency <concurrency>` for details.
+一个服务可以同时运行多个工作者，最多可以达到用户定义的限制。有关详细信息，请参见 :ref:`并发 <concurrency> 。
 
 .. _dependency_injection:
 
-Dependency Injection
---------------------
+依赖注入
+--------
 
-Adding a dependency to a service class is declarative. That is, the attribute on the class is a declaration, rather than the interface that workers can actually use.
+向一个服务类添加一个依赖是声明性的。也就是说，类上的属性是一个声明，而不是工作者可以实际使用的接口。。
 
-The class attribute is a :class:`~nameko.extensions.DependencyProvider`. It is responsible for providing an object that is injected into service workers.
+类属性是一个 :class:`~nameko.extensions.DependencyProvider`。它负责提供一个注入到服务工作者中的对象。
 
-Dependency providers implement a :meth:`~nameko.extensions.DependencyProvider.get_dependency` method, the result of which is injected into a newly created worker.
+依赖提供程序实现一个 :meth:`~nameko.extensions.DependencyProvider.get_dependency` 方法，其结果被注入到一个新创建的工作者中。
 
-The lifecycle of a worker is:
+一个工作者的生命周期为：
 
-    #. Entrypoint fires
-    #. Worker instantiated from service class
-    #. Dependencies injected into worker
-    #. Method executes
-    #. Worker is destroyed
+    #. 入口点触发
+    #. 从服务类实例化工作者
+    #. 依赖注入到工作者
+    #. 方法执行
+    #. 销毁工作者
 
-In pseudocode this looks like::
+用伪代码看起来像::
 
     worker = Service()
     worker.other_rpc = worker.other_rpc.get_dependency()
     worker.method()
     del worker
 
-Dependency providers live for the duration of the service, whereas the injected dependency can be unique to each worker.
+依赖提供者在服务期间有效，而注入的依赖对于每个工作者而言都是唯一的。
 
 .. _concurrency:
 
-Concurrency
------------
+并发
+----
 
-Nameko is built on top of the `eventlet <http://eventlet.net/>`_ library, which provides concurrency via "greenthreads". The concurrency model is co-routines with implicit yielding.
+Nameko建立在 `eventlet <http://eventlet.net/>`_ 库之上，该库通过"greenthreads"提供并发性。并发模型是隐式生成的协同例程。
 
-Implicit yielding relies on `monkey patching <http://eventlet.net/doc/patching.html#monkeypatching-the-standard-library>`_ the standard library, to trigger a yield when a thread waits on I/O. If you host services with ``nameko run`` on the command line, Nameko will apply the monkey patch for you.
+隐式良率依赖于 `猴子补丁 <http://eventlet.net/doc/patching.html#monkeypatching-the-standard-library>`_ 标准库，在线程等待I/O时触发一个yield。如果您在命令行上使用 ``nameko run`` 托管服务，Nameko将为您应用猴子补丁。
 
-Each worker executes in its own greenthread. The maximum number of concurrent workers can be tweaked based on the amount of time each worker will spend waiting on I/O.
+每个工作者都在其自己的greenthread中执行。可以根据每个工作者在I/O上等待所花费的时间来调整并发工作者的最大数量。
 
-Workers are stateless so are inherently thread safe, but dependencies should ensure they are unique per worker or otherwise safe to be accessed concurrently by multiple workers.
+工作者是无状态的，所以线程本质上是安全的，但是依赖关系应确保它们对于每个工作者都是唯一的，否则，可以安全地由多个工作者同时访问。
 
-Note that many C-extensions that are using sockets and that would normally be considered thread-safe may not work with greenthreads. Among them are `librabbitmq <https://pypi.python.org/pypi/librabbitmq>`_, `MySQLdb <http://mysql-python.sourceforge.net/MySQLdb.html>`_ and others.
+请注意，许多正在使用套接字的C-扩展名通常被认为是线程安全的，可能不适用于greenthreads。其中有 `librabbitmq <https://pypi.python.org/pypi/librabbitmq>`_, `MySQLdb <http://mysql-python.sourceforge.net/MySQLdb.html>`_ 和其它。
 
 .. _extensions:
 
-Extensions
-----------
+扩展
+----
 
-All entrypoints and dependency providers are implemented as "extensions". We refer to them this way because they're outside of service code but are not required by all services (for example, a purely AMQP-exposed service won't use the HTTP entrypoints).
+所有入口点和依赖提供程序都实现为"扩展"。我们之所以这样称呼它们，是因为它们在服务代码之外，但不是所有服务都需要它们(例如，纯AMQP公开的服务将不使用HTTP入口点)。
 
-Nameko has a number of :ref:`built-in extensions <built_in_extensions>`, some are :ref:`provided by the community <community_extensions>` and you can :ref:`write your own <writing_extensions>`.
+Nameko具有许多 :ref:`内置扩展<built_in_extensions>` ，其中一些 :ref:`由社区提供<community_extensions>`，您可以 :ref:`编写自己的扩展<writing_extensions>` 。
 
 .. _running_services:
 
-Running Services
-----------------
+运行服务
+-------
 
-All that's required to run a service is the service class and any relevant configuration. The easiest way to run one or multiple services is with the Nameko CLI::
+运行一个服务所需的全部就是服务类和任何相关配置。运行一个或多个服务的最简单方法是使用Nameko CLI::
 
     $ nameko run module:[ServiceClass]
 
-This command will discover Nameko services in the given ``module``\s and start running them. You can optionally limit it to specific ``ServiceClass``\s.
+此命令将在给定 ``module`` 中发现Nameko服务并开始运行它们。您可以选择将其限制为特定的 ``ServiceClass`` 。
 
 .. _containers:
 
-Service Containers
-^^^^^^^^^^^^^^^^^^
 
-Each service class is delegated to a :class:`~nameko.containers.ServiceContainer`. The container encapsulates all the functionality required to run a service, and also encloses any :ref:`extensions <extensions>` on the service class.
+服务容器
+^^^^^^^^
 
-Using the ``ServiceContainer`` to run a single service:
+每个服务类都委托给一个 :class:`~nameko.containers.ServiceContainer` 。容器封装了运行服务所需的所有功能，并且还封装了服务类上的任何 :ref:`扩展<extensions>` 。
+
+使用 ``ServiceContainer`` 来运行一个单一的服务：
 
 .. literalinclude:: examples/service_container.py
 
 .. _runner:
 
-Service Runner
-^^^^^^^^^^^^^^
+服务运行器
+^^^^^^^^^^
 
-:class:`~nameko.runners.ServiceRunner` is a thin wrapper around multiple containers, exposing methods for starting and stopping all the wrapped containers simultaneously. This is what ``nameko run`` uses internally, and it can also be constructed programmatically:
+:class:`~nameko.runners.ServiceRunner` 是一个围绕多个容器的薄包装，它公开了同时启动和停止所有包装容器的方法。这是 ``nameko run`` 内部使用的东西，也可以通过编程方式构造：
 
 .. literalinclude:: examples/service_runner.py
 
-If you create your own runner rather than using `nameko run`, you must also apply the eventlet `monkey patch <http://eventlet.net/doc/patching.html#monkeypatching-the-standard-library>`_.
+如果你创建自己的运行程序而不是使用 `nameko run` ，则还必须应用eventlet `猴子补丁 <http://eventlet.net/doc/patching.html#monkeypatching-the-standard-library>`_ 。
 
-See the `nameko.cli.run <https://github.com/nameko/nameko/blob/cc13802d8afb059419384e2e2016bae7fe1415ce/nameko/cli/run.py#L3-L4>`_ module for an example.
-
+有关示例，请参见 `nameko.cli.run <https://github.com/nameko/nameko/blob/cc13802d8afb059419384e2e2016bae7fe1415ce/nameko/cli/run.py#L3-L4>`_ 模块。
