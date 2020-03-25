@@ -1,4 +1,4 @@
-### 3.1 runnto_base
+### 3.1 融拓基础模块
 定义业务模块共用的模型和函数.
 
 #### 3.1.1 eSIM抽象模型
@@ -24,10 +24,10 @@
 #### 3.1.1.2 方法
 * 无
 
-####3.1.2 客户拥有的卡
+#### 3.1.2 客户拥有的卡
 模型名称 `esim.card`, 描述 `客户拥有的卡`.
 
-####3.1.2.1 字段
+#### 3.1.2.1 字段
 
 * `card_pool_id` `套餐池`, 类型`Many2one`, 关联对象`esim.card.pool`, 删除时`restrict`
 * `has_data_group` `组成套餐池`, 类型`Boolean`
@@ -36,13 +36,13 @@
 * `state` `状态`, 类型`Selection`, 选项`[('power-off', '未开卡'), ('power-on', '已开卡'), ('using', '使用中'), ('suspended', '已暂停'), ('scraped', '已报废')]`
 * `validity_period` `eSIM有效期`, 类型`Float`
 
-####3.1.2.2 方法
+#### 3.1.2.2 方法
 * 无
 
-####3.1.3 套餐池
+#### 3.1.3 套餐池
 模型名称 `esim.card.pool`, 描述 `套餐池`.
 
-####3.1.3.1 字段
+#### 3.1.3.1 字段
 
 * `esim_card_ids` `eSIM卡`, 类型`One2many`, 关联对象`esim.card`, 反向字段`card_pool_id`, 复制`True`
 * `esim_card_qty` `设备数`, 类型`Integer`, 计算方法`_compute_esim_card_qty`, 存储`True`, 只读`True`, 复制`False`
@@ -52,7 +52,7 @@
 * `usable_data_qty` `可用流量`, 类型`Integer`, 计算方法`_compute_usable_data_qty`, 存储`True`, 只读`True`, 复制`False`
 * `used_data_qty` `已用流量`, 类型`Integer`
 
-####3.1.3.2 方法
+#### 3.1.3.2 方法
 * `_compute_esim_card_qty` 
     ```
     @api.depends('esim_card_ids')
@@ -70,21 +70,21 @@
             record.usable_data_qty = record.total_data_qty - record.used_data_qty
     ```
 
-####3.1.4 eSIM卡套餐
+#### 3.1.4 eSIM卡套餐
 模型名称 `esim.data.plan`, 描述 `eSIM卡套餐`.
 
-####3.1.4.1 字段
+#### 3.1.4.1 字段
 
 * `state` `状态`, 类型`Selection`, 选项`[('using', '使用中'), ('stoped', '已关闭')]`, 默认值 `using`
 * `supported_country_ids` `支持的国家`, 类型`One2many`, 关联对象`esim.supported.country`, 反向字段`data_plan_id`, 复制`True`
 
-####3.1.4.2 方法
+#### 3.1.4.2 方法
 * 无
 
-####3.1.5 运营商服务
+#### 3.1.5 运营商服务
 模型名称 `esim.operator.service`, 描述 `运营商服务`.
 
-####3.1.5.1 字段
+#### 3.1.5.1 字段
 
 * `country_id` `国家`, 类型`Many2one`, 关联对象`res.country`, 删除时`restrict`
 * `data` `密文`, 类型`Char`
@@ -95,28 +95,28 @@
 * `operator_id` `运营商`, 类型`Many2one`, 关联对象`res.operator`, 删除时`restrict`
 * `service_type` `服务类别`, 类型`Selection`, 选项`[('data', '流量')]`
 
-####3.1.5.2 方法
+#### 3.1.5.2 方法
 * 无
 
-####3.1.6 套餐支持的国家和运营商
+#### 3.1.6 套餐支持的国家和运营商
 模型名称 `esim.supported.country`, 描述 `套餐支持的国家和运营商`.
 
-####3.1.6.1 字段
+#### 3.1.6.1 字段
 
 * `country_id` `国家`, 类型`Many2one`, 关联对象`res.country`, 删除时`restrict`
 * `esim_card_id` `设备`, 类型`Many2one`, 关联对象`esim.card`, 删除时`restrict`
 * `operator_id` `运营商`, 类型`Many2one`, 关联对象`res.operator`, 删除时`restrict`
 
-####3.1.6.2 方法
+#### 3.1.6.2 方法
 * 无
 
-####3.1.7 res.partner
+#### 3.1.7 res.partner
 模型名称 `res.partner`.
 
-####3.1.7.1 字段
+#### 3.1.7.1 字段
 
 * `esim_ids` `eSIM卡`, 类型`One2many`, 关联对象`esim.card`, 反向字段`partner_id`, 复制`True`
 
-####3.1.7.2 方法
+#### 3.1.7.2 方法
 * 无
 
