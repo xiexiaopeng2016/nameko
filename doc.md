@@ -1,10 +1,10 @@
-###3.1 runnto_base
+### 3.1 runnto_base
 定义业务模块共用的模型和函数.
 
-####3.1.1 eSIM抽象模型
+#### 3.1.1 eSIM抽象模型
 其他模型通过继承这个模型来拥有这些字段. 模型名称 `abstract.esim`, 描述 `eSIM抽象模型`.
 
-####3.1.1.1 字段
+#### 3.1.1.1 字段
 
 * `billing_cycle` `计费周期`, 类型`Integer`
 * `billing_uom_id` `计费周期单位`, 类型`Many2one`, 关联对象`uom.uom`, 删除时`restrict`
@@ -21,7 +21,7 @@
 * `warning_value` `告警值`, 类型`Float`
 * `warning_value_type` `告警值类型`, 类型`Selection`, 选项`[('number', '剩余流量'), ('percentage', '剩余百分比')]`
 
-####3.1.1.2 方法
+#### 3.1.1.2 方法
 * 无
 
 ####3.1.2 客户拥有的卡
